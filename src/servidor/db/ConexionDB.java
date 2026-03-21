@@ -33,7 +33,6 @@ public class ConexionDB {
     public Connection getConexion() {
         return conexion;
     }
-
     // Metodo de limpieza para cuando apague el servidor
     public void cerrarConexion(){
         try{
