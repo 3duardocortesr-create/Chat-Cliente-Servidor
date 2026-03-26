@@ -27,7 +27,7 @@ public class InicializadorDB {
         // Usamos try-with-resources para que el Statement se cierre automáticamente
         try (Statement stmt = conexion.createStatement()) {
 
-            // ACTIVACIÓN CRÍTICA: Habilitar el soporte de llaves foráneas en SQLite
+            // Habilita el soporte de llaves foráneas en SQLite
             // en SQLite las llaves foráneas vienen desactivadas por defecto, por eso se activan aquí
             stmt.execute("PRAGMA foreign_keys = ON;");
 

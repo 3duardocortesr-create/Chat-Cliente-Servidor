@@ -1,7 +1,8 @@
 package servidor.db;
 
+import modelos.Mensaje;
 import modelos.PaqueteDatos;
-
+import modelos.Usuario;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,9 +23,9 @@ public class ManejadorCliente implements Runnable {
     @Override
     public void run() {
         try {
-            // TIP CRÍTICO: En Java Sockets, siempre debes inicializar el ObjectOutputStream
+            // En Java Sockets, siempre se debe inicializar el ObjectOutputStream
             // primero y hacer un flush() antes de inicializar el ObjectInputStream.
-            // Si no lo haces, ambos lados se quedarán bloqueados esperando.
+            // Si no, ambos lados se quedarán bloqueados esperando.
             out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
@@ -40,9 +41,14 @@ public class ManejadorCliente implements Runnable {
                 // Decidimos qué hacer basándonos en la acción del paquete
                 switch (paqueteRecibido.getAccion()) {
                     case PaqueteDatos.ACCION_CHAT:
-                        // TODO: Aquí agregaremos la lógica para guardar el mensaje en SQLite
-                        System.out.println("Mensaje a procesar...");
-
+                        MensajeDAO daoMensaje = new MensajeDAO();
+                        Mensaje nuevoMensaje = paqueteRecibido.getMensaje();
+                        boolean mensajeGuardado = daoMensaje.insertarMensaje(nuevoMensaje);
+                        if (mensajeGuardado){
+                            System.out.println("Mensaje guardado correctamente en la BD.");
+                        } else {
+                            System.err.println("No se pudo guardar el mensaje en la BD.");
+                        }
                         // Retransmitimos el mensaje a todos para que aparezca en sus pantallas
                         servidor.emitirATodos(paqueteRecibido);
                         break;
@@ -53,8 +59,15 @@ public class ManejadorCliente implements Runnable {
                         break;
 
                     case PaqueteDatos.ACCION_CRUD_CREAR_USUARIO:
-                        // TODO: Lógica para insertar en SQLite
-                        System.out.println("Petición de crear usuario recibida.");
+                        UsuarioDAO daoUsuario = new UsuarioDAO();
+                        //Se extrae el usuario que viene dentro del paquete
+                        Usuario nuevoUsuario = paqueteRecibido.getUsuario();
+                        boolean exito = daoUsuario.insertarUsuario(nuevoUsuario);
+                        if (exito) {
+                            System.out.println("Usuario " + nuevoUsuario.getUsername() + "registrado en BD. ");
+                        } else {
+                            System.out.println("Fallo el registro de Usuario");
+                        }
                         break;
 
                     // Aquí irán los demás casos del CRUD (Eliminar, Modificar, Consultar)
