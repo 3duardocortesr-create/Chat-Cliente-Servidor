@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 public class ManejadorCliente implements Runnable {
     private Socket socket;
@@ -37,9 +38,33 @@ public class ManejadorCliente implements Runnable {
             while (true) {
                 // readObject() bloquea el hilo hasta que recibe un paquete
                 PaqueteDatos paqueteRecibido = (PaqueteDatos) in.readObject();
+                UsuarioDAO daoUser = new UsuarioDAO();
 
                 // Decidimos qué hacer basándonos en la acción del paquete
                 switch (paqueteRecibido.getAccion()) {
+
+                    case "CRUD_LEER_USUARIOS":
+                        // Consultamos la BD
+                        List<Usuario> lista = daoUser.obtenerTodosLosUsuarios();
+                        // Preparamos respuesta
+                        PaqueteDatos respuestaLeer = new PaqueteDatos("CRUD_LISTA_USUARIOS");
+                        respuestaLeer.setDatosExtra(lista); // Metemos la lista en el comodín
+                        out.writeObject(respuestaLeer);
+                        out.flush();
+                        break;
+
+                    case "CRUD_ACTUALIZAR_USUARIO":
+                        boolean editOk = daoUser.actualizarUsuario(paqueteRecibido.getUsuario());
+                        System.out.println("Actualización en BD: " + (editOk ? "Éxito" : "Fallo"));
+                        // Aquí podrías enviar un paquete de confirmación al cliente
+                        break;
+
+                    case "CRUD_ELIMINAR_USUARIO":
+                        int idEliminar = paqueteRecibido.getUsuario().getIdUsuario();
+                        boolean delOk = daoUser.eliminarUsuario(idEliminar);
+                        System.out.println("Eliminación en BD: " + (delOk ? "Éxito" : "Fallo"));
+                        break;
+
                     case PaqueteDatos.ACCION_CHAT:
                         MensajeDAO daoMensaje = new MensajeDAO();
                         Mensaje nuevoMensaje = paqueteRecibido.getMensaje();
@@ -59,18 +84,15 @@ public class ManejadorCliente implements Runnable {
                         break;
 
                     case PaqueteDatos.ACCION_CRUD_CREAR_USUARIO:
-                        UsuarioDAO daoUsuario = new UsuarioDAO();
-                        //Se extrae el usuario que viene dentro del paquete
-                        Usuario nuevoUsuario = paqueteRecibido.getUsuario();
-                        boolean exito = daoUsuario.insertarUsuario(nuevoUsuario);
-                        if (exito) {
-                            System.out.println("Usuario " + nuevoUsuario.getUsername() + "registrado en BD. ");
-                        } else {
-                            System.out.println("Fallo el registro de Usuario");
+                        UsuarioDAO dao = new UsuarioDAO();
+                        boolean ok = dao.insertarUsuario(paqueteRecibido.getUsuario());
+                        // Opcional: Enviar respuesta de éxito al cliente
+                        if(ok) {
+                            PaqueteDatos respuesta = new PaqueteDatos("CRUD_EXITO");
+                            out.writeObject(respuesta);
                         }
                         break;
 
-                    // Aquí irán los demás casos del CRUD (Eliminar, Modificar, Consultar)
                 }
             }
 

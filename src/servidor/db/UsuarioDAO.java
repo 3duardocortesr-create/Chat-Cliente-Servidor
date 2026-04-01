@@ -18,7 +18,6 @@ public class UsuarioDAO {
         Connection conexion = ConexionDB.getInstancia().getConexion();
 
         try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
-            // Sustituimos los '?' por los valores del objeto
             pstmt.setString(1, usuario.getUsername());
             pstmt.setString(2, usuario.getNombreCompleto());
             pstmt.setString(3, usuario.getEstado());

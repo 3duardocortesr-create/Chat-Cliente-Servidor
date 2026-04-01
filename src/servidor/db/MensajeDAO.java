@@ -27,7 +27,8 @@ public class MensajeDAO {
         }
     }
 
-    // READ: Obtiene el historial de chat
+
+    //Obtiene el historial de chat
     public List<Mensaje> obtenerHistorial() {
         List<Mensaje> historial = new ArrayList<>();
         String sql = "SELECT * FROM Mensajes ORDER BY fecha_hora ASC";

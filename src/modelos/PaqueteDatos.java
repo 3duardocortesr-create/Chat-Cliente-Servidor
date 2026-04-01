@@ -10,6 +10,11 @@ public class PaqueteDatos implements Serializable{
     public static final String ACCION_ESCRIBIENDO = "ESCRIBIENDO";
     public static final String ACCION_CRUD_CREAR_USUARIO = "CRUD_CREAR_USUARIO";
     public static final String ACCION_DESCONECTAR = "DESCONECTAR";
+    public static final String ACCION_CRUD_LEER_USUARIOS = "CRUD_LEER_USUARIOS";
+    public static final String ACCION_CRUD_ACTUALIZAR_USUARIO = "CRUD_ACTUALIZAR_USUARIO";
+    public static final String ACCION_CRUD_ELIMINAR_USUARIO = "CRUD_ELIMINAR_USUARIO";
+
+
 
     private String accion;          //Qué queremos que haga el servidor/cliente
     private Usuario usuario;        //Quién envía la petición o los datos del usuario afectado
@@ -31,7 +36,7 @@ public class PaqueteDatos implements Serializable{
     public void setUsuario(Usuario usuario){ this.usuario = usuario;}
 
     public Mensaje getMensaje(){ return mensaje;}
-    public void setUsuario(){ this.mensaje = mensaje;}
+    public void setMensaje(Mensaje mensaje){ this.mensaje = mensaje;}
 
     public Object getDatosExtra(){ return datosExtra;}
     public void setDatosExtra(Object datosExtra){ this.datosExtra = datosExtra;}

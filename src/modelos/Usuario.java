@@ -29,10 +29,10 @@ public class Usuario implements Serializable{
     public void setUsername(String username){this.username = username;}
 
     public String getNombreCompleto(){ return nombreCompleto;}
-    public void setNombreCompleto(){this.nombreCompleto = nombreCompleto;}
+    public void setNombreCompleto(String nombreCompleto){this.nombreCompleto = nombreCompleto;}
 
     public String getEstado(){ return estado;}
-    public void setEstado(){this.estado = estado;}
+    public void setEstado(String estado){this.estado = estado;}
 
     //El toString para cuando se requiera mostrar el usuario en una lista en la GUI
     @Override

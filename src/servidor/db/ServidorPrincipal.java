@@ -1,9 +1,6 @@
 package servidor.db;
 
 import modelos.PaqueteDatos;
-import servidor.db.ConexionDB;
-import servidor.db.InicializadorDB;
-
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -11,13 +8,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServidorPrincipal {
+public class
+ServidorPrincipal {
     private final int PUERTO = 9090;
     // Lista para guardar los canales de salida hacia todos los clientes
     private List<ObjectOutputStream> clientesConectados = new ArrayList<>();
 
     public void iniciarServidor() {
-        // 1. Preparamos la Base de Datos antes de aceptar conexiones
+        // Prepara la Base de Datos antes de aceptar conexiones
         ConexionDB.getInstancia();
         InicializadorDB.crearTablas();
 
@@ -40,7 +38,7 @@ public class ServidorPrincipal {
         }
     }
 
-    // Usamos 'synchronized' para evitar que dos hilos modifiquen la lista al mismo tiempo
+    // Usamos synchronized para evitar que dos hilos modifiquen la lista al mismo tiempo
     public synchronized void registrarCliente(ObjectOutputStream out) {
         clientesConectados.add(out);
     }
@@ -49,7 +47,7 @@ public class ServidorPrincipal {
         clientesConectados.remove(out);
     }
 
-    // Método para retransmitir un paquete a todos los clientes conectados
+    // Metodo para retransmitir un paquete a todos los clientes conectados
     public synchronized void emitirATodos(PaqueteDatos paquete) {
         for (ObjectOutputStream out : clientesConectados) {
             try {

@@ -8,14 +8,14 @@ public class InicializadorDB {
         //Obtenemos la conexión usando el Singleton
         Connection conexion = ConexionDB.getInstancia().getConexion();
 
-        //1. Sentencia SQL para la tabla Usuarios
+        //Sentencia SQL para la tabla Usuarios
         String sqlUsuarios = "CREATE TABLE IF NOT EXISTS Usuarios ("
                 + "id_usuario INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "username TEXT UNIQUE NOT NULL, "
                 + "nombre_completo TEXT NOT NULL, "
                 + "estado TEXT DEFAULT 'Desconectado'"
                 + ");";
-        // 2. Sentencia SQL para la tabla Mensajes
+        // Sentencia SQL para la tabla Mensajes
         // Relacionada con Usuarios mediante id_usuario
         String sqlMensajes = "CREATE TABLE IF NOT EXISTS Mensajes ("
                 + "id_mensaje INTEGER PRIMARY KEY AUTOINCREMENT, "
