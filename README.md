@@ -23,9 +23,11 @@ En este desarrollo se integran los siguientes pilares de la computación:
 Actualmente el proyecto se encuentra en **fase de desarrollo**.
 - [x] Configuración inicial del entorno.
 - [x] Estructura base de Sockets.
-- [ ] Implementación de hilos para chat multiusuario.
-- [ ] Diseño final de la interfaz gráfica.
-- [ ] Conexión a base de datos SQLite.
+- [x] Implementación de hilos para chat multiusuario.
+- [x] Diseño final de la interfaz gráfica.
+- [x] Conexión a base de datos SQLite.
+- [ ] 
+> **Nota:** El núcleo funcional del proyecto está completo. Actualmente, el repositorio permanece abierto para fases de optimización y escalabilidad.
 
 ---
 
